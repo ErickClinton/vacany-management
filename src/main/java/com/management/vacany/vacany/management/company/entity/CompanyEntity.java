@@ -1,4 +1,4 @@
-package com.management.vacany.vacany.management.company.entities;
+package com.management.vacany.vacany.management.company.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
