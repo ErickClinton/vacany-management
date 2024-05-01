@@ -33,5 +33,4 @@ public class JobEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-
 }
