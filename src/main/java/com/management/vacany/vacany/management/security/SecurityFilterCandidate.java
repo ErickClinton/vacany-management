@@ -1,6 +1,7 @@
 package com.management.vacany.vacany.management.security;
 
 import com.management.vacany.vacany.management.provider.JWTProvider;
+import com.management.vacany.vacany.management.provider.JWTProviderCandidate;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,36 +15,38 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecurityFilterCandidate extends OncePerRequestFilter {
 
     @Autowired
-    private JWTProvider jwtProvider;
+    private JWTProviderCandidate jwtProviderCandidate;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
 
-        if(request.getRequestURI().startsWith("/company")){
+        if(request.getRequestURI().startsWith("/candidate")){
             if(header !=null){
-                var token = this.jwtProvider.validateToken(header);
+                var token = this.jwtProviderCandidate.validateToken(header);
+                System.out.println(token);
                 if(token == null){
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
-
                 }
-                request.setAttribute("company_id",token.getSubject());
+                request.setAttribute("candidate_id",token.getSubject());
 
                 var roles = token.getClaim("roles").asList(Object.class);
-                var grants = roles.stream().map(role-> new SimpleGrantedAuthority("Role_"+ role.toString())).toList();
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(token.getSubject(),null, grants);
+                var grants = roles.stream().map(role->new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
+
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken
+                        (token.getSubject(),null,grants);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
+
 
 
         filterChain.doFilter(request,response);

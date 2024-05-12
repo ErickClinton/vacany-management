@@ -1,6 +1,7 @@
-package com.management.vacany.vacany.management.company.useCases;
+package com.management.vacany.vacany.management.company;
 
 import com.management.vacany.vacany.management.company.dto.AuthCompanyDto;
+import com.management.vacany.vacany.management.company.useCases.AuthCompanyUseCase;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.naming.AuthenticationException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/company")
 public class AuthCompanyController {
 
     @Autowired
     private AuthCompanyUseCase authCompanyUseCase;
 
-    @PostMapping("/company")
+    @PostMapping("/auth")
     public ResponseEntity<Object> create(@RequestBody AuthCompanyDto authCompanyDto)  {
         try{
             return ResponseEntity.ok().body(this.authCompanyUseCase.execute(authCompanyDto));
